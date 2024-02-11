@@ -1,5 +1,7 @@
 # Outdoor Temperature Monitor
 
+Temperature Monitor using BMP388 on a Raspberry Pi Zero WH.
+
 <!--
 SPDX-FileCopyrightText: © 2022 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
 SPDX-License-Identifier: MIT
@@ -25,6 +27,12 @@ SPDX-License-Identifier: MIT
 * Hot Glue
 * Velcro Strips
 
-## Assembly Instructions
+## Wiring Diagram
 
-Coming soon!
+![wiring](images/wiring_diagram.png)
+
+## Images
+
+![open box](images/open_box.jpg)
+
+![closed box](images/closed_box.jpg)

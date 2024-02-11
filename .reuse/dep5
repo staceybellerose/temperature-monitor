@@ -6,3 +6,7 @@ Source: https://github.com/staceybellerose/temp-monitor
 Files: .vscode/*
 Copyright: © 2024 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
 License: Unlicense
+
+Files: images/*
+Copyright: © 2024 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+License: MIT
