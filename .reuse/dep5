@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Outdoor Temperature Monitor
+Upstream-Contact: Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+Source: https://github.com/staceybellerose/temp-monitor
+
+Files: .vscode/*
+Copyright: © 2024 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+License: Unlicense

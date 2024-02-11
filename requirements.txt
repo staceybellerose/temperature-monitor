@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+# SPDX-License-Identifier: Unlicense
+
+Adafruit_IO >= 2.6, < 3.0
+adafruit-circuitpython-bmp3xx >= 1.3, < 1.4
