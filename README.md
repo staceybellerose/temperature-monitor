@@ -31,6 +31,34 @@ SPDX-License-Identifier: MIT
 
 ![wiring](images/wiring_diagram.png)
 
+## Software Installation
+
+Clone this repo to the Raspberry Pi Zero WH:
+
+```bash
+git clone https://github.com/staceybellerose/temperature-monitor.git
+```
+
+Create a [Positionstack](https://positionstack.com/) developer account.
+
+Create an [Adafruit.IO](https://io.adafruit.com/) developer account.
+
+Copy `config.ini.sample` to `config.ini` and add your PositionStack.com access key,
+and your Adafruit.IO username and key.
+
+Install the necessary modules:
+
+```bash
+python3 -m venv venv
+venv/bin/pip3 install -r requirements.txt
+```
+
+Run the script:
+
+```bash
+venv/bin/python3 main.py
+```
+
 ## Images
 
 ![open box](images/open_box.jpg)
