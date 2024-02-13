@@ -39,7 +39,7 @@ class AIOLogger:
         self.feeds = self.aio.feeds()
         self.metadata: Metadata = None
 
-    def set_metadata(self, *, latitude=None, longitude=None, elevation=None):
+    def set_metadata(self, latitude=None, longitude=None, elevation=None):
         """
         Set the metadata to use when posting to Adafruit.IO.
 

@@ -31,7 +31,7 @@
       "args": {
         "key": "remotepath",
         "description": "Remote path:",
-        "default": "projects/spotify"
+        "default": "projects/temp-monitor"
       },
     }
   ]

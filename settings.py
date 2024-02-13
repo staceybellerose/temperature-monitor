@@ -6,8 +6,39 @@ Application settings parser.
 """
 
 import configparser
+import dataclasses
 
 from eprint import eprint
+
+@dataclasses.dataclass
+class Location:
+    """
+    Location data
+    """
+    latitude: float
+    longitude: float
+
+
+@dataclasses.dataclass
+class Adafruit:
+    """
+    Metadata for Adafruit.IO account
+    """
+    key: str
+    username: str
+    send_location: bool
+
+
+@dataclasses.dataclass
+class Positionstack:
+    """
+    Metadata for Positionstack account
+    """
+    token: str
+    query: str
+    region: str
+    country: str
+
 
 class Settings:
     """
@@ -23,23 +54,38 @@ class Settings:
         with open(inifilepath, encoding="utf-8") as file:
             config.read_file(file)
             try:
-                positionstack = config['positionstack']
-                self._geocoding_token = positionstack.get('token')
-                self._query = positionstack.get('query')
-                self._country = positionstack.get('country')
-
                 adafruit = config['adafruit']
-                self._adafruit_key = adafruit.get('key')
-                self._adafruit_username = adafruit.get('username')
+                adafruit_key = adafruit.get('key')
+                adafruit_username = adafruit.get('username')
+                send_location = adafruit.getboolean('sendlocation', True)
+                self.adafruit = Adafruit(adafruit_key, adafruit_username, send_location)
+                self.location = None
+                if "location" in config:
+                    location = config['location']
+                    latitude = location.get('latitude')
+                    longitude = location.get('longitude')
+                    if latitude is not None and longitude is not None:
+                        self.location = Location(latitude, longitude)
+                if self.location is None:
+                    positionstack = config['positionstack']
+                    token = positionstack.get('token')
+                    query = positionstack.get('query')
+                    region = positionstack.get('region')
+                    country = positionstack.get('country')
+                    self.positionstack = Positionstack(token, query, region, country)
             except configparser.Error as exc:
                 raise RuntimeError(
                     "ERR: Invalid settings file. Please use config.ini.sample to create a\nproperly formatted file."
                 ) from exc
-        if len(self._geocoding_token) == 0:
+        if (
+            self.adafruit.send_location
+            and self.location is None
+            and len(self.positionstack.token) == 0
+        ):
             raise RuntimeError(
                 "ERR: You need to set your PositionStack token first. If you\ndon't already have one, you can register for a free account at\nhttps://positionstack.com/signup/free"
             )
-        if len(self._adafruit_key) == 0 or len(self._adafruit_username) == 0:
+        if len(self.adafruit.key) == 0 or len(self.adafruit.username) == 0:
             raise RuntimeError(
                 "ERR: You need to set your Adafruit IO key and username first.\nIf you don't already have one, you can register for a free account at\nhttps://io.adafruit.com/"
             )
@@ -49,39 +95,81 @@ class Settings:
         Dump the parsed settings file to stderr for debugging.
         """
         eprint("Parsed settings file")
-        eprint("Location to look up:", self._query, self._country)
+        if self.location is not None:
+            eprint("Location to use:", self.location.latitude, self.location.longitude)
+        else:
+            eprint(
+                "Location to look up:",
+                self.positionstack.query,
+                self.positionstack.region,
+                self.positionstack.country
+            )
 
     @property
     def geocoding_token(self):
         """
-        Get the PositionStack.com token
+        Get the Positionstack.com token
         """
-        return self._geocoding_token
+        return self.positionstack.token
 
     @property
     def query(self):
         """
-        Get the PositionStack.com query
+        Get the Positionstack.com query
         """
-        return self._query
+        return self.positionstack.query
+
+    @property
+    def region(self):
+        """
+        Get the Positionstack region
+        """
+        return self.positionstack.region
 
     @property
     def country(self):
         """
-        Get the PositionStack.com country
+        Get the Positionstack.com country
         """
-        return self._country
+        return self.positionstack.country
 
     @property
     def adafruit_key(self):
         """
         Get the Adafruit.IO API key
         """
-        return self._adafruit_key
+        return self.adafruit.key
 
     @property
     def adafruit_username(self):
         """
         Get the Adafruit.IO API username
         """
-        return self._adafruit_username
+        return self.adafruit.username
+
+    @property
+    def send_location(self):
+        """
+        Get the locationdata flag
+        """
+        return self.adafruit.send_location
+
+    @property
+    def latitude(self):
+        """
+        Get the latitude
+        """
+        return self.location.latitude
+
+    @property
+    def longitude(self):
+        """
+        Get the longitude
+        """
+        return self.location.longitude
+
+    def has_location(self):
+        """
+        Determine whether location data is present
+        """
+        return self.location is not None

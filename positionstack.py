@@ -8,9 +8,9 @@ Wrapper for PositionStack.com API.
 from get_api import GetApi
 from eprint import eprint
 
-class PositionStack(GetApi):
+class Positionstack(GetApi):
     """
-    Wrapper for PositionStack.com API.
+    Wrapper for Positionstack.com API.
     """
 
     _BASE_URL = "http://api.positionstack.com/v1"
@@ -58,12 +58,14 @@ class PositionStack(GetApi):
         data = json_data["data"][0]
         latitude: float = data["latitude"]
         longitude: float = data["longitude"]
-        label: str = data["locality"] if "locality" in data else data["label"]
+        label: str = data["label"]
         eprint("Geocoding lookup sucessful:", label)
         eprint("Latitude:", latitude, "Longitude:", longitude)
         return (latitude, longitude, label)
 
-    def forward_geocode(self, query: str, country: str = None, region: str = None) -> tuple:
+    def forward_geocode(
+            self, query: str, region: str = None, country: str = None
+        ) -> tuple[float, float, str]:
         """
         Call the forward geocoding API endpoint from postitionstack.com and
         return the location of the sent query.
@@ -71,8 +73,8 @@ class PositionStack(GetApi):
         Parameters
         ----------
         query: Free-form location query (e.g. address, zip/postal code, city name, region name).
-        country: Country code to filter results: either a 2- or 3-letter ISO-3166 Country Code.
         region: Region name to filter results: district, city, state, administrative area, etc.
+        country: Country code to filter results: either a 2- or 3-letter ISO-3166 Country Code.
 
         Returns
         -------

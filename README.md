@@ -39,12 +39,16 @@ Clone this repo to the Raspberry Pi Zero WH:
 git clone https://github.com/staceybellerose/temperature-monitor.git
 ```
 
-Create a [Positionstack](https://positionstack.com/) developer account.
-
 Create an [Adafruit.IO](https://io.adafruit.com/) developer account.
 
-Copy `config.ini.sample` to `config.ini` and add your PositionStack.com access key,
-and your Adafruit.IO username and key.
+Copy `config.ini.sample` to `config.ini` and add your Adafruit.IO username and key.
+
+If you want to record your location data, there are two options:
+
+1. Manually add your latitude and longitude to `config.ini`.
+
+1. Create a [Positionstack](https://positionstack.com/) developer account, and
+add your PositionStack.com access key to `config.ini`.
 
 Install the necessary modules:
 

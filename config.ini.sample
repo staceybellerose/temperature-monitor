@@ -1,11 +1,22 @@
 # SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
 # SPDX-License-Identifier: Unlicense
 
-[positionstack]
-token = 1234567890abcdef1234567890abcdef
-query = 90210
-country = US
-
 [adafruit]
 key = 1234567890abcdef1234567890abcdef
 username = lady_ada
+sendlocation = yes
+
+# If sending location data, one of the following sections is required.
+# Otherwise, neither is required.
+
+# optional section
+[positionstack]
+token = 1234567890abcdef1234567890abcdef
+query = 90210
+region = Beverly Hills
+country = US
+
+# optional section
+[location]
+latitude = 37.782177
+longitude = -122.391246

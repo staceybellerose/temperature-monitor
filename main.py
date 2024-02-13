@@ -15,7 +15,7 @@ import adafruit_bmp3xx
 
 from eprint import eprint
 from settings import Settings
-from positionstack import PositionStack
+from positionstack import Positionstack
 from opentopodata import OpenTopoData
 from aio_logger import AIOLogger
 
@@ -30,19 +30,25 @@ class TemperatureMonitor:
     def __init__(self) -> None:
         self.settings = Settings('config.ini')
         self.settings.dump()
-        ps = PositionStack(self.settings.geocoding_token)
-        latitude, longitude, _locality = ps.forward_geocode(
-            self.settings.query,
-            self.settings.country
-        )
-        otd = OpenTopoData()
-        elevation = otd.get_elevation(latitude, longitude)
-        self.aio_logger = AIOLogger(
-            self.settings.adafruit_username,
-            self.settings.adafruit_key,
-            group_name=self._FEED_GROUP
-        )
-        self.aio_logger.set_metadata(latitude=latitude, longitude=longitude, elevation=elevation)
+        if self.settings.send_location:
+            if self.settings.has_location():
+                latitude = self.settings.latitude
+                longitude = self.settings.longitude
+            else:
+                ps = Positionstack(self.settings.geocoding_token)
+                latitude, longitude, _label = ps.forward_geocode(
+                    self.settings.query,
+                    self.settings.region,
+                    self.settings.country
+                )
+            otd = OpenTopoData()
+            elevation = otd.get_elevation(latitude, longitude)
+            self.aio_logger = AIOLogger(
+                self.settings.adafruit_username,
+                self.settings.adafruit_key,
+                group_name=self._FEED_GROUP
+            )
+            self.aio_logger.set_metadata(latitude, longitude, elevation)
         self.aio_logger.get_feed(self._TEMPERATURE_FEED)
         i2c = board.I2C()
         self.sensor = adafruit_bmp3xx.BMP3XX_I2C(i2c)
