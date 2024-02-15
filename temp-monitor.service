@@ -1,0 +1,11 @@
+[Unit]
+Description=Spotify LCD Display Service
+After=network-online.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/temp-monitor.sh
+PIDFile=/tmp/temp-monitor/temp-monitor.pid
+
+[Install]
+WantedBy=network-online.target

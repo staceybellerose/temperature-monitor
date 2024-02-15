@@ -7,27 +7,31 @@ SPDX-FileCopyrightText: © 2022 Stacey Adams <stacey.belle.rose [AT] gmail [DOT]
 SPDX-License-Identifier: MIT
 -->
 
-## Parts List
+## Hardware Installation
 
-| Qty | Component | Part Name | Mfr Part Number |
-|:---:|:-----|:-----|:----------------|
-|  1  | computer | Raspberry Pi Zero WH | [Adafruit #3708](https://www.adafruit.com/product/3708) |
-|  1  | sensor board | Adafruit BMP388 | [Adafruit #3966](https://www.adafruit.com/product/3966) |
-|  1  | Qwiic cable | STEMMA QT / Qwiic JST SH 4-Pin Cable - 50mm Long | [Adafruit #4399](https://www.adafruit.com/product/4399) |
-|  1  | Qwiic SHIM | SparkFun Qwiic SHIM for Raspberry Pi | [SparkFun DEV-15794](https://www.sparkfun.com/products/15794) |
-|  1  | power supply | Inland 5.25V 2.4A Wall Power Supply for Raspberry Pi | [Microcenter SKU 422766](https://www.microcenter.com/product/486582/inland-525v-24a-wall-power-supply-for-raspberry-pi-and-asus-tinker-board) |
-|  1  | power supply (alternative) | Inland 5.2V 2.4A Micro USB Power Supply | [Microcenter SKU 279737](https://www.microcenter.com/product/637777/inland-52v-24a-micro-usb-power-supply) |
-|  1  | project box | LKG Philmore Project Box PB110 | [Microcenter SKU 591057](https://www.microcenter.com/product/662080/lkg-philmore-project-box-pb110) |
-|  1  | microSD card | Micro Center 16GB microSDHC Card Class 10 Flash Memory Card | [Microcenter SKU 415141](https://www.microcenter.com/product/486146/micro-center-16gb-microsdhc-card-class-10-flash-memory-card-with-adapter) |
+### Equipment List
+
+* [Raspberry Pi Zero WH](https://www.adafruit.com/product/3708) or [Raspberry Pi Zero W](https://www.adafruit.com/product/3400)
+* [SparkFun Qwiic SHIM for Raspberry Pi](https://www.sparkfun.com/products/15794)
+* [STEMMA QT / Qwiic JST SH 4-pin Cable with Premium Female Sockets](https://www.adafruit.com/product/4397)
+* [Adafruit BMP388 sensor board](https://www.adafruit.com/product/3966)
+* Project box: [LKG Philmore Project Box PB110 - Microcenter SKU 591057](https://www.microcenter.com/product/662080/lkg-philmore-project-box-pb110)
+* microSD card: [Micro Center 16GB microSDHC Card Class 10 Flash Memory Card - Microcenter SKU 415141](https://www.microcenter.com/product/486146/micro-center-16gb-microsdhc-card-class-10-flash-memory-card-with-adapter)
+
+#### Power supply options
+
+* Inland 5.25V 2.4A Wall Power Supply for Raspberry Pi: [Microcenter SKU 422766](https://www.microcenter.com/product/486582/inland-525v-24a-wall-power-supply-for-raspberry-pi-and-asus-tinker-board)
+* Inland 5.2V 2.4A Micro USB Power Supply: [Microcenter SKU 279737](https://www.microcenter.com/product/637777/inland-52v-24a-micro-usb-power-supply)
 
 ### Miscellaneous Parts
 
-* 6x2 Pin female headers
+* 6x2 Pin female headers (used to hold the Qwiic SHIM down)
+* 2 6-pin male headers (if using Raspberry Pi Zero W)
 * Weatherproof Electrical Outlet Cover
 * Hot Glue
 * Velcro Strips
 
-## Wiring Diagram
+### Wiring Diagram
 
 ![wiring](images/wiring_diagram.png)
 
@@ -41,7 +45,8 @@ git clone https://github.com/staceybellerose/temperature-monitor.git
 
 Create an [Adafruit.IO](https://io.adafruit.com/) developer account.
 
-Copy `config.ini.sample` to `config.ini` and add your Adafruit.IO username and key.
+Copy `config.ini.sample` to `config.ini` and add your Adafruit.IO username and
+key.
 
 If you want to record your location data, there are two options:
 
@@ -50,7 +55,7 @@ If you want to record your location data, there are two options:
 1. Create a [Positionstack](https://positionstack.com/) developer account, and
 add your PositionStack.com access key to `config.ini`.
 
-Install the necessary modules:
+Install the necessary modules into a virtual environment:
 
 ```bash
 python3 -m venv venv
@@ -62,6 +67,43 @@ Run the script:
 ```bash
 venv/bin/python3 main.py
 ```
+
+### Temperature Monitor Service Run at Boot
+
+Edit `bin/temp-monitor.sh` to reflect the absolute path of this project and the
+path of the python virtual environment.
+
+Install the startup script:
+
+```bash
+sudo cp bin/temp-monitor.sh /usr/local/bin/
+```
+
+Copy the systemd unit file to the appropriate folder:
+
+```bash
+sudo mkdir -p /usr/local/lib/systemd/system/ # this folder may not exist yet
+sudo cp temp-monitor.service /usr/local/lib/systemd/system/
+```
+
+Activate the service:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable temp-monitor.service
+sudo systemctl start temp-monitor.service
+```
+
+View the output of the service to confirm that it is working:
+
+```bash
+journalctl -u temp-monitor.service -f
+```
+
+#### Still To Do
+
+Need to make the filesystem read-only so that the microSD card doesn't corrupt
+itself after running for several months.
 
 ## Images
 
