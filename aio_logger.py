@@ -7,7 +7,12 @@ Wrapper class for Adafruit.IO.
 
 from datetime import datetime, timezone
 import dataclasses
+import json
+from urllib3.util import Retry
 
+import requests
+from requests import RequestException
+from requests.adapters import HTTPAdapter
 from Adafruit_IO import Client, Group, Feed, AdafruitIOError
 
 from eprint import eprint
@@ -22,9 +27,61 @@ class Metadata:
     ele: float
 
 
+class AIOClient(Client):
+    """
+    Adafruit.IO Client wrapper to better handle request retries.
+    """
+    def __init__(self, username, key, proxies=None, base_url='https://io.adafruit.com'):
+        super().__init__(username, key, proxies, base_url)
+        self.session = requests.Session()
+        self.session.proxies = proxies
+        retry_strategy = Retry(
+            total=5,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
+            allowed_methods=["HEAD", "GET", "PUT", "POST", "DELETE", "OPTIONS", "TRACE"]
+        )
+        self.session.mount('https://', HTTPAdapter(max_retries=retry_strategy))
+        self.session.mount('http://', HTTPAdapter(max_retries=retry_strategy))
+
+    def _build_headers(self, content_type: str = None):
+        headers = {'X-AIO-Key': self.key}
+        if content_type is not None:
+            headers['Content-Type'] = content_type
+        return headers
+
+    def _get(self, path, params=None):
+        response = self.session.get(
+            self._compose_url(path),
+            headers=self._build_headers(),
+            params=params
+        )
+        self._last_response = response
+        self._handle_error(response)
+        return response.json()
+
+    def _post(self, path, data):
+        response = self.session.post(
+            self._compose_url(path),
+            headers=self._build_headers('application/json'),
+            data=json.dumps(data)
+        )
+        self._last_response = response
+        self._handle_error(response)
+        return response.json()
+
+    def _delete(self, path):
+        response = self.session.delete(
+            self._compose_url(path),
+            headers=self._build_headers('application/json')
+        )
+        self._last_response = response
+        self._handle_error(response)
+
+
 class AIOLogger:
     """
-    Adafruit.IO API Client wrapper.
+    Adafruit.IO API Data Logger.
     """
     def __init__(self, aio_user: str, aio_key: str, group_name: str = "Default"):
         """
@@ -34,7 +91,7 @@ class AIOLogger:
         aio_key: Authentication Key for Adafruit.IO.
         group_name: Name of group to use at Adafruit.IO.
         """
-        self.aio = Client(aio_user, aio_key)
+        self.aio = AIOClient(aio_user, aio_key)
         self.group = self.get_feed_group(group_name)
         self.feeds = self.aio.feeds()
         self.metadata: Metadata = None
@@ -111,5 +168,5 @@ class AIOLogger:
         feed_key = f"{self.group.key}.{feed_name}"
         try:
             self.aio.send(feed_key, datapoint, metadata)
-        except AdafruitIOError:
+        except (AdafruitIOError, RequestException):
             eprint(f"WARN: Unable to transmit data ({datapoint}) to feed {feed_key} - skipped.")
