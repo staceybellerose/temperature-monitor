@@ -8,10 +8,9 @@ Wrapper class for Adafruit.IO.
 from datetime import datetime, timezone
 import dataclasses
 import json
-from urllib3.util import Retry
 
-import requests
-from requests import RequestException
+from urllib3.util import Retry
+from requests import RequestException, Session
 from requests.adapters import HTTPAdapter
 from Adafruit_IO import Client, Group, Feed, AdafruitIOError
 
@@ -33,7 +32,7 @@ class AIOClient(Client):
     """
     def __init__(self, username, key, proxies=None, base_url='https://io.adafruit.com'):
         super().__init__(username, key, proxies, base_url)
-        self.session = requests.Session()
+        self.session = Session()
         self.session.proxies = proxies
         retry_strategy = Retry(
             total=5,

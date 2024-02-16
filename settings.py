@@ -55,10 +55,11 @@ class Settings:
             config.read_file(file)
             try:
                 adafruit = config['adafruit']
-                adafruit_key = adafruit.get('key')
-                adafruit_username = adafruit.get('username')
-                send_location = adafruit.getboolean('sendlocation', True)
-                self.adafruit = Adafruit(adafruit_key, adafruit_username, send_location)
+                self.adafruit = Adafruit(
+                    adafruit.get('key'),
+                    adafruit.get('username'),
+                    adafruit.getboolean('sendlocation', True)
+                )
                 self.location = None
                 if "location" in config:
                     location = config['location']
@@ -68,11 +69,12 @@ class Settings:
                         self.location = Location(latitude, longitude)
                 if self.location is None:
                     positionstack = config['positionstack']
-                    token = positionstack.get('token')
-                    query = positionstack.get('query')
-                    region = positionstack.get('region')
-                    country = positionstack.get('country')
-                    self.positionstack = Positionstack(token, query, region, country)
+                    self.positionstack = Positionstack(
+                        positionstack.get('token'),
+                        positionstack.get('query'),
+                        positionstack.get('region'),
+                        positionstack.get('country')
+                        )
             except configparser.Error as exc:
                 raise RuntimeError(
                     "ERR: Invalid settings file. Please use config.ini.sample to create a\nproperly formatted file."
