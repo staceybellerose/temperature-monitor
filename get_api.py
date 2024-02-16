@@ -5,12 +5,13 @@
 Wrapper for GET API calls.
 """
 
-import json
-import urllib.request
 import urllib.parse
-from urllib.error import URLError, HTTPError
 from typing import Any
 from collections.abc import Callable
+
+from urllib3.util import Retry
+import requests
+from requests.adapters import HTTPAdapter
 
 from eprint import eprint
 
@@ -18,6 +19,24 @@ class GetApi:
     """
     Wrapper for GET API calls.
     """
+    def __init__(self, proxies=None) -> None:
+        """
+        Initialize the API.
+
+        Parameters
+        ----------
+        proxies: a dict of proxies to be used by the requests library.
+        """
+        self.session = requests.Session()
+        self.session.proxies = proxies
+        retry_strategy = Retry(
+            total=5,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
+            allowed_methods=["HEAD", "GET", "PUT", "POST", "DELETE", "OPTIONS", "TRACE"]
+        )
+        self.session.mount('https://', HTTPAdapter(max_retries=retry_strategy))
+        self.session.mount('http://', HTTPAdapter(max_retries=retry_strategy))
 
     def build_url(self, base: str, endpoint: str, params: dict) -> str:
         """
@@ -52,19 +71,20 @@ class GetApi:
 
         Raises
         ------
-        HTTPError: when the server can't fulfill the request.
-        URLError: when the server can't be reached.
+        ConnectionError: when the server can't be reached.
+        RequestException: when the server can't fulfill the request.
+        ValueError: when the server doesn't return parsable JSON data.
         """
         try:
-            with urllib.request.urlopen(url) as response:
-                value = response.read()
-                json_data = json.loads(value.decode("utf-8"))
-                return json_parser(json_data)
-        except HTTPError as e:
-            eprint("The server couldn't fulfill the request.")
-            eprint("Error code:", e.code)
+            response = self.session.get(url)
+            json_data = response.json()
+            return json_parser(json_data)
+        except ValueError as e:
+            eprint("Unable to parse JSON response.")
             raise e
-        except URLError as e:
+        except requests.ConnectionError as e:
             eprint("We failed to reach a server.")
-            eprint("Reason:", e.reason)
+            raise e
+        except requests.RequestException as e:
+            eprint("The server couldn't fulfill the request.")
             raise e

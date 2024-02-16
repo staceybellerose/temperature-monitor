@@ -17,7 +17,7 @@ class Positionstack(GetApi):
     _FORWARD = "forward"
     _REVERSE = "reverse"
 
-    def __init__(self, token: str) -> None:
+    def __init__(self, token: str, **kwargs) -> None:
         """
         Initialize the API.
 
@@ -25,6 +25,7 @@ class Positionstack(GetApi):
         ----------
         token: Your postitionstack API access key.
         """
+        super().__init__(**kwargs)
         self.token = token
 
     def _get_url(self, endpoint: str, params: dict) -> str:
