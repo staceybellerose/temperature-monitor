@@ -30,6 +30,11 @@ class TemperatureMonitor:
     def __init__(self) -> None:
         self.settings = Settings('config.ini')
         self.settings.dump()
+        self.aio_logger = AIOLogger(
+            self.settings.adafruit_username,
+            self.settings.adafruit_key,
+            group_name=self._FEED_GROUP
+        )
         if self.settings.send_location:
             if self.settings.has_location():
                 latitude = self.settings.latitude
@@ -43,11 +48,6 @@ class TemperatureMonitor:
                 )
             otd = OpenTopoData()
             elevation = otd.get_elevation(latitude, longitude)
-            self.aio_logger = AIOLogger(
-                self.settings.adafruit_username,
-                self.settings.adafruit_key,
-                group_name=self._FEED_GROUP
-            )
             self.aio_logger.set_metadata(latitude, longitude, elevation)
         self.aio_logger.get_feed(self._TEMPERATURE_FEED)
         i2c = board.I2C()
