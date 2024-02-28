@@ -79,12 +79,12 @@ class GetApi:
             response = self.session.get(url)
             json_data = response.json()
             return json_parser(json_data)
-        except ValueError as e:
+        except ValueError as exc:
             eprint("Unable to parse JSON response.")
-            raise e
-        except requests.ConnectionError as e:
+            raise exc
+        except requests.ConnectionError as exc:
             eprint("We failed to reach a server.")
-            raise e
-        except requests.RequestException as e:
+            raise exc
+        except requests.RequestException as exc:
             eprint("The server couldn't fulfill the request.")
-            raise e
+            raise exc
