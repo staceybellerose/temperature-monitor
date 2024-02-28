@@ -7,6 +7,7 @@ Application settings parser.
 
 import configparser
 import dataclasses
+from typing import Optional
 
 from eprint import eprint
 
@@ -60,11 +61,11 @@ class Settings:
                     adafruit.get('username'),
                     adafruit.getboolean('sendlocation', True)
                 )
-                self.location = None
+                self.location: Optional[Location] = None
                 if "location" in config:
                     location = config['location']
-                    latitude = location.get('latitude')
-                    longitude = location.get('longitude')
+                    latitude = location.getfloat('latitude', fallback=None)
+                    longitude = location.getfloat('longitude', fallback=None)
                     if latitude is not None and longitude is not None:
                         self.location = Location(latitude, longitude)
                 if self.location is None:
@@ -108,69 +109,73 @@ class Settings:
             )
 
     @property
-    def geocoding_token(self):
+    def geocoding_token(self) -> str:
         """
         Get the Positionstack.com token
         """
         return self.positionstack.token
 
     @property
-    def query(self):
+    def query(self) -> str:
         """
         Get the Positionstack.com query
         """
         return self.positionstack.query
 
     @property
-    def region(self):
+    def region(self) -> str:
         """
         Get the Positionstack region
         """
         return self.positionstack.region
 
     @property
-    def country(self):
+    def country(self) -> str:
         """
         Get the Positionstack.com country
         """
         return self.positionstack.country
 
     @property
-    def adafruit_key(self):
+    def adafruit_key(self) -> str:
         """
         Get the Adafruit.IO API key
         """
         return self.adafruit.key
 
     @property
-    def adafruit_username(self):
+    def adafruit_username(self) -> str:
         """
         Get the Adafruit.IO API username
         """
         return self.adafruit.username
 
     @property
-    def send_location(self):
+    def send_location(self) -> bool:
         """
         Get the locationdata flag
         """
         return self.adafruit.send_location
 
     @property
-    def latitude(self):
+    def latitude(self) -> float:
         """
         Get the latitude
         """
-        return self.location.latitude
+        if self.location is not None:
+            return self.location.latitude
+        return float('nan')
 
     @property
-    def longitude(self):
+    def longitude(self) -> float:
         """
         Get the longitude
         """
-        return self.location.longitude
+        if self.location is not None:
+            return self.location.longitude
+        return float('nan')
 
-    def has_location(self):
+    def has_location(self) -> bool:
         """
         Determine whether location data is present
         """

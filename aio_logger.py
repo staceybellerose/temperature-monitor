@@ -8,6 +8,7 @@ Wrapper class for Adafruit.IO.
 from datetime import datetime, timezone
 import dataclasses
 import json
+from typing import Any, Optional
 
 from urllib3.util import Retry
 from requests import RequestException, Session
@@ -21,9 +22,9 @@ class Metadata:
     """
     Metadata to record at Adafruit.IO along with data from feed.
     """
-    lat: float
-    lon: float
-    ele: float
+    lat: Optional[float]
+    lon: Optional[float]
+    ele: Optional[float]
 
 
 class AIOClient(Client):
@@ -43,7 +44,7 @@ class AIOClient(Client):
         self.session.mount('https://', HTTPAdapter(max_retries=retry_strategy))
         self.session.mount('http://', HTTPAdapter(max_retries=retry_strategy))
 
-    def _build_headers(self, content_type: str = None):
+    def _build_headers(self, content_type: Optional[str] = None):
         headers = {'X-AIO-Key': self.key}
         if content_type is not None:
             headers['Content-Type'] = content_type
@@ -93,9 +94,14 @@ class AIOLogger:
         self.aio = AIOClient(aio_user, aio_key)
         self.group = self.get_feed_group(group_name)
         self.feeds = self.aio.feeds()
-        self.metadata: Metadata = None
+        self.metadata: Optional[Metadata] = None
 
-    def set_metadata(self, latitude=None, longitude=None, elevation=None):
+    def set_metadata(
+            self,
+            latitude: Optional[float] = None,
+            longitude: Optional[float] = None,
+            elevation: Optional[float] = None
+        ):
         """
         Set the metadata to use when posting to Adafruit.IO.
 
@@ -150,7 +156,7 @@ class AIOLogger:
         feed = Feed(name=feed_name)
         return self.aio.create_feed(feed, group_key=self.group.key)
 
-    def log(self, feed_name, datapoint):
+    def log(self, feed_name: str, datapoint: Any):
         """
         Log data to Adafruit.IO.
 

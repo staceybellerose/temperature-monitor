@@ -22,7 +22,7 @@ class OpenTopoData(GetApi):
     ]
     _ENDPOINT = ",".join(_DATASETS)
 
-    def _parse_json(self, json_data):
+    def _parse_json(self, json_data) -> float:
         """
         Parse the OpenTopoData elevation API endpoint JSON data and
         return the elevation.
@@ -36,7 +36,7 @@ class OpenTopoData(GetApi):
         The elevation returned from the API endpoint, as a float.
         """
         data = json_data["results"][0]
-        elevation = data["elevation"]
+        elevation: float = data["elevation"]
         eprint("Elevation lookup successful:", elevation)
         return elevation
 

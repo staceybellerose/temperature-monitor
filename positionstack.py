@@ -5,6 +5,8 @@
 Wrapper for PositionStack.com API.
 """
 
+from typing import Dict, Optional, Tuple
+
 from get_api import GetApi
 from eprint import eprint
 
@@ -28,7 +30,7 @@ class Positionstack(GetApi):
         super().__init__(**kwargs)
         self.token = token
 
-    def _get_url(self, endpoint: str, params: dict) -> str:
+    def _get_url(self, endpoint: str, params: Dict) -> str:
         """
         Get the appropriately formatted url for the endpoint.
 
@@ -44,7 +46,7 @@ class Positionstack(GetApi):
         params["access_key"] = self.token
         return self.build_url(self._BASE_URL, endpoint, params)
 
-    def _parse_forward_json(self, json_data) -> tuple[float, float, str]:
+    def _parse_forward_json(self, json_data) -> Tuple[float, float, str]:
         """
         Parse the forward geocoding API endpoint JSON data.
 
@@ -65,8 +67,8 @@ class Positionstack(GetApi):
         return (latitude, longitude, label)
 
     def forward_geocode(
-            self, query: str, region: str = None, country: str = None
-        ) -> tuple[float, float, str]:
+            self, query: str, region: Optional[str] = None, country: Optional[str] = None
+        ) -> Tuple[float, float, str]:
         """
         Call the forward geocoding API endpoint from postitionstack.com and
         return the location of the sent query.
@@ -94,7 +96,7 @@ class Positionstack(GetApi):
         url = self._get_url(self._FORWARD, params)
         return self.call_get_api(url, self._parse_forward_json)
 
-    def _parse_reverse_json(self, json_data) -> dict:
+    def _parse_reverse_json(self, json_data) -> Dict:
         """
         Parse the forward geocoding API endpoint JSON data.
 
@@ -111,7 +113,7 @@ class Positionstack(GetApi):
         eprint("Reverse Geocoding lookup sucessful:", label)
         return data
 
-    def reverse_geocode(self, latitude: float, longitude: float) -> dict:
+    def reverse_geocode(self, latitude: float, longitude: float) -> Dict:
         """
         Call the reverse geocoding API endpoint from postitionstack.com and
         return the location of the sent query.

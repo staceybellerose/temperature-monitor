@@ -6,7 +6,7 @@ Wrapper for GET API calls.
 """
 
 import urllib.parse
-from typing import Any
+from typing import Any, Dict
 from collections.abc import Callable
 
 from urllib3.util import Retry
@@ -38,7 +38,7 @@ class GetApi:
         self.session.mount('https://', HTTPAdapter(max_retries=retry_strategy))
         self.session.mount('http://', HTTPAdapter(max_retries=retry_strategy))
 
-    def build_url(self, base: str, endpoint: str, params: dict) -> str:
+    def build_url(self, base: str, endpoint: str, params: Dict) -> str:
         """
         Get the appropriately formatted url for the endpoint.
 
