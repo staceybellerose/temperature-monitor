@@ -17,19 +17,22 @@ SPDX-License-Identifier: MIT
 * [Adafruit BMP388 sensor board](https://www.adafruit.com/product/3966)
 * Project box: [LKG Philmore Project Box PB110 - Microcenter SKU 591057](https://www.microcenter.com/product/662080/lkg-philmore-project-box-pb110)
 * microSD card: [Micro Center 16GB microSDHC Card Class 10 Flash Memory Card - Microcenter SKU 415141](https://www.microcenter.com/product/486146/micro-center-16gb-microsdhc-card-class-10-flash-memory-card-with-adapter)
+* [AM2320B](https://www.jemrf.com/products/am2320b-dht22-digital-temperature-and-humidity-sensor) Temperature/Humidity Sensor, bought on eBay.
 
 #### Power supply options
 
 * Inland 5.25V 2.4A Wall Power Supply for Raspberry Pi: [Microcenter SKU 422766](https://www.microcenter.com/product/486582/inland-525v-24a-wall-power-supply-for-raspberry-pi-and-asus-tinker-board)
 * Inland 5.2V 2.4A Micro USB Power Supply: [Microcenter SKU 279737](https://www.microcenter.com/product/637777/inland-52v-24a-micro-usb-power-supply)
 
-### Miscellaneous Parts
+### Miscellaneous Parts and Tools
 
 * 6x2 Pin female headers (used to hold the Qwiic SHIM down)
-* 2 6-pin male headers (if using Raspberry Pi Zero W)
-* Weatherproof Electrical Outlet Cover
-* Hot Glue
-* Velcro Strips
+* 2x6 or 2x20 pin male header (if using Raspberry Pi Zero W)
+* [Weatherproof Electrical Outlet Cover](https://www.homedepot.com/p/304669863)
+* Dremel™ rotary tool, to cut holes in project box for power and sensor wires
+* Hot Glue, to seal wire outlets in project box
+* Velcro Strip, to mount project box on wall
+* Soldering iron, to solder the AM2320B wires to the BMP388 board
 
 ### Wiring Diagram
 
@@ -107,6 +110,20 @@ itself after running for several months.
 
 ## Images
 
+Project box with components placed, ready to be sealed:
+
 ![open box](images/open_box.jpg)
 
+Closed project box, with velcro strip applied:
+
 ![closed box](images/closed_box.jpg)
+
+Project box after adding AM2320B sensor, mounted on left side with nut and bolt:
+
+![AM2320B added](images/am2320b_added.jpg)
+
+Hot glue was applied all around the nut and the AM2320B wiring before closing the project box.
+
+Project box mounted to exterior wall:
+
+![mounted project](images/mounted_project.jpg)
