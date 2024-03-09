@@ -1,4 +1,13 @@
-[FORMAT]
+# SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose@gmail.com>
+# SPDX-License-Identifier: Unlicense
 
-# Regexp for a line that is allowed to be longer than the limit.
-ignore-long-lines=^\s*(#\s*)?<?https?://\S+>?$|^\s*(\w*\s*=\s*)?(\"|\').*(\"|\'),?\s*$
+[MASTER]
+ignore-paths=^[.]venv/.*$,^mypy/.*$
+recursive=y
+
+[FORMAT]
+good-names=r,g,b,n,i,j,x,y,z
+ignore-long-lines=^\s*(#\s*)?<?https?://\S+>?$|^\s*(\w*\s*=\s*)?(return\s*)?(f)?(\"|\').*(\"|\'),?\s*$
+
+[MESSAGES CONTROL]
+disable=fixme

@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+# SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose@gmail.com>
 # SPDX-License-Identifier: MIT
 
 """
@@ -96,6 +96,7 @@ class TemperatureMonitor:
         except OSError as exc:
             eprint("Unable to read sensor.", exc.strerror, sep="\n")
 
+
 def main() -> NoReturn:
     """
     Entry point function when run from command line.
@@ -117,6 +118,7 @@ def main() -> NoReturn:
     while True:
         monitor.log_data()
         time.sleep(60)
+
 
 if __name__ == '__main__':
     main()

@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+# SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose@gmail.com>
 # SPDX-License-Identifier: MIT
 
 """
@@ -14,6 +14,7 @@ import requests
 from requests.adapters import HTTPAdapter
 
 from eprint import eprint
+
 
 class GetApi:
     """

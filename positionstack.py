@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+# SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose@gmail.com>
 # SPDX-License-Identifier: MIT
 
 """
@@ -9,6 +9,7 @@ from typing import Dict, Optional, Tuple
 
 from get_api import GetApi
 from eprint import eprint
+
 
 class Positionstack(GetApi):
     """
@@ -67,8 +68,8 @@ class Positionstack(GetApi):
         return (latitude, longitude, label)
 
     def forward_geocode(
-            self, query: str, region: Optional[str] = None, country: Optional[str] = None
-        ) -> Tuple[float, float, str]:
+        self, query: str, region: Optional[str] = None, country: Optional[str] = None
+    ) -> Tuple[float, float, str]:
         """
         Call the forward geocoding API endpoint from postitionstack.com and
         return the location of the sent query.

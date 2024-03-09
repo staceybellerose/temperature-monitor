@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+# SPDX-FileCopyrightText: © 2024 Stacey Adams <stacey.belle.rose@gmail.com>
 # SPDX-License-Identifier: MIT
 
 """
@@ -8,6 +8,7 @@ Wrapper for OpenTopoData.org API.
 from get_api import GetApi
 from eprint import eprint
 
+
 class OpenTopoData(GetApi):
     """
     OpenTopoData Wrapper.
@@ -15,10 +16,10 @@ class OpenTopoData(GetApi):
 
     _BASE_URL = "https://api.opentopodata.org/v1"
     _DATASETS = [
-        "nzdem8m", # New Zealand
-        "ned10m", # USA
-        "eudem25m", # Europe
-        "mapzen" # Global
+        "nzdem8m",  # New Zealand
+        "ned10m",  # USA
+        "eudem25m",  # Europe
+        "mapzen"  # Global
     ]
     _ENDPOINT = ",".join(_DATASETS)
 

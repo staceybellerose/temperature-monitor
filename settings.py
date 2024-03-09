@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: © 2022 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+# SPDX-FileCopyrightText: © 2022 Stacey Adams <stacey.belle.rose@gmail.com>
 # SPDX-License-Identifier: MIT
 
 """
@@ -10,6 +10,7 @@ import dataclasses
 from typing import Optional
 
 from eprint import eprint
+
 
 @dataclasses.dataclass
 class Location:

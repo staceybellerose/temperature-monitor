@@ -3,7 +3,7 @@
 Temperature Monitor using BMP388 and AM2320B sensors on a Raspberry Pi Zero WH.
 
 <!--
-SPDX-FileCopyrightText: © 2022 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+SPDX-FileCopyrightText: © 2022 Stacey Adams <stacey.belle.rose@gmail.com>
 SPDX-License-Identifier: MIT
 -->
 

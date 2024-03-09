@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: © 2022, 2024 Stacey Adams <stacey.belle.rose [AT] gmail [DOT] com>
+# SPDX-FileCopyrightText: © 2022, 2024 Stacey Adams <stacey.belle.rose@gmail.com>
 # SPDX-License-Identifier: MIT
 
 """
@@ -16,6 +16,7 @@ from requests.adapters import HTTPAdapter
 from Adafruit_IO import Client, Group, Feed, AdafruitIOError
 
 from eprint import eprint
+
 
 @dataclasses.dataclass
 class Metadata:
@@ -97,11 +98,11 @@ class AIOLogger:
         self.metadata: Optional[Metadata] = None
 
     def set_metadata(
-            self,
-            latitude: Optional[float] = None,
-            longitude: Optional[float] = None,
-            elevation: Optional[float] = None
-        ):
+        self,
+        latitude: Optional[float] = None,
+        longitude: Optional[float] = None,
+        elevation: Optional[float] = None
+    ):
         """
         Set the metadata to use when posting to Adafruit.IO.
 
